@@ -5,11 +5,14 @@ In this repository we present the codes used in the Thesis: "Facial Expression R
 
 The following datasets where used in the implementation of this project and are available upon request to the authors:
 
-DISFA
+DISFA dataset:
+
 Mavadati, S. M., Mahoor, M. H., Bartlett, K., Trinh, P., & Cohn, J. F. (2013). Disfa: A spontaneous facial action intensity database. IEEE Transactions on Affective Computing, 4(2), 151-160.
 
-HM-Libras
+HM-Libras dataset:
+
 da Silva, E. P., Costa, P. D. P., Oliveira, K. M., Kumada, J. M. D. M., & Florentino, G. A. Recognition of affective and grammatical facial expressions: a study for Brazilian sign language.
 
-SILFA
+SILFA dataset:
+
 Silva, E., Costa, P., Kumada, K., & De Martino, J. M. SILFA: Sign Language Facial Action Database for the Development of Assistive Technologies for the Deaf. In 2020 15th IEEE International Conference on Automatic Face and Gesture Recognition (FG 2020)(FG) (pp. 382-386).
