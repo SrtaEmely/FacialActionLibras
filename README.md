@@ -2,6 +2,7 @@
 
 In this repository we present the codes used in the Thesis: "Facial Expression Recognition in Brazilian Sign Language using Facial Action Unit Coding".
 
+---
 
 The following datasets where used in the implementation of this project and are available upon request to the authors:
 
