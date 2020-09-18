@@ -1,14 +1,12 @@
 """
 ###############################################################
-Import for neural network
+#Import for neural network
 ###############################################################
 """
-
 from keras import backend as K
 from keras.models import load_model
 from keras.utils import np_utils
 from sklearn.preprocessing import LabelEncoder
-
 # Import necessary components for face detection
 import numpy as np
 import pandas as pd
@@ -16,22 +14,18 @@ import cv2
 import dlib
 #import tensorflow.compat.v1 as tf
 #tf.disable_v2_behavior() 
-
+# Import necessary components for creation of xml file
 from xml.etree import ElementTree, cElementTree
 from xml.dom import minidom
 import xml.etree.ElementTree as etree
 import xml.etree.ElementTree as et
 from xml.etree.ElementTree import tostring
-
-#%%
 """
 ###############################################################
-FUNCTIONS
+#FUNCTIONS
 ###############################################################
 """
 def get_landmarks(im):
-    #(x_s,y_s)=im.shape
-    #gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
     im = np.array(im, dtype='uint8')
     faces = cascade.detectMultiScale(im, 1.15,  4, 0, (100, 100))
     if (faces==()):
@@ -39,13 +33,10 @@ def get_landmarks(im):
     else:
         for (x,y,w,h) in faces:
             rect=dlib.rectangle(int(x),int(y),int(x+w),int(y+h))
-        #return np.array([[p.x, p.y] for p in predictor(gray, rect).parts()],dtype=np.float32)
         return np.matrix([[p.x, p.y] for p in predictor(im, rect).parts()])
 ##############################################################################
 ##############################################################################    
 def crop_face(im):
-    #(x_s,y_s)=im.shape
-    #gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
     faces = cascade.detectMultiScale(im, 1.15,  4, 0, (100, 100))
     if (faces==()):
         l=np.matrix([[0 for row in range(0,2)] for col in range(Indicesface)])
@@ -56,22 +47,16 @@ def crop_face(im):
             rect=dlib.rectangle(int(x),int(y),int(x+w),int(y+h))
             l=np.array([[p.x, p.y] for p in predictor(im, rect).parts()],dtype=np.float32)
             sub_face = im[y:y+h, x:x+w]
-            #cv2.imshow('Result',sub_face)
         return sub_face ,l 
 ##############################################################################
 ##############################################################################
 def annotate_landmarks(im, landmarks):
-    #create a copy from the image
     img = im.copy()
-    #create vectors to represent each landmark
-    #print(landmarks)
     if (landmarks.all()==0):
         return im
     else:
         for idx, point in enumerate(landmarks):
-            #print('índice e posição do ponto',idx,point)
             pos = (point[0, 0], point[0, 1])
-            #Mark with circles the points found before
             cv2.circle(img, pos, 2, color=(255, 255, 255), thickness=-1)
         return img
 ##############################################################################
@@ -108,39 +93,33 @@ def fmeasure(y_true, y_pred):
 
 """
 ###############################################################
-PARAMETERS
+#PARAMETERS
 ###############################################################
 """
-PREDICTOR_PATH = 'F:/Doutorado/Pesquisa/Python/Prototipo_anotador_elan/shape_predictor_68_face_landmarks.dat'
+PREDICTOR_PATH = '.../shape_predictor_68_face_landmarks.dat'
 predictor = dlib.shape_predictor(PREDICTOR_PATH)
-cascade_path='F:/Doutorado/Pesquisa/Python/Prototipo_anotador_elan/haarcascade_frontalface_default.xml'
+cascade_path='.../haarcascade_frontalface_default.xml'
 cascade = cv2.CascadeClassifier(cascade_path)
 Indicesface=68
-#IMAGE
 im_s = 96
-#OUTPUTS
-#output_u=[]
-#output_l=[]
-#M=[]
-
 """
 ###############################################################
 #Model
 ###############################################################
 """
-modelu = load_model('F:\Doutorado\Pesquisa\Python\FacialActionLibras\Trained_model\squeezenet_u_corpus_6.h5',custom_objects={'fmeasure': fmeasure, 'precision':precision, 'recall':recall})
+modelu = load_model('...\Trained_model\squeezenet_u_corpus_6.h5',custom_objects={'fmeasure': fmeasure, 'precision':precision, 'recall':recall})
 modelu.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy',fmeasure, precision, recall])
 
-modell = load_model('F:\Doutorado\Pesquisa\Python\FacialActionLibras\Trained_model\squeezenet_l_corpus6.h5',custom_objects={'fmeasure': fmeasure, 'precision':precision, 'recall':recall})
+modell = load_model('...\Trained_model\squeezenet_l_corpus6.h5',custom_objects={'fmeasure': fmeasure, 'precision':precision, 'recall':recall})
 modell.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy',fmeasure, precision, recall])
 
 #x_u = np.load('x_u.npy')
-#x_u_train1 = np.load('F:/Doutorado/Pesquisa/Python//Data_annotations/x_u_corpus.npy')
-x_u_train2 = np.load('F:/Doutorado/Pesquisa/Python/cnn_lstm/data/x_u_train2.npy')
+#x_u_train1 = np.load('.../Data_annotations/x_u_corpus.npy')
+x_u_train2 = np.load('.../Data_annotations/x_u_train2.npy')
 #
-y_u = np.load('F:/Doutorado/Pesquisa/Python/FacialActionLibras/Data_annotations/y_u.npy')
-y_u_train1 = np.load('F:/Doutorado/Pesquisa/Python/FacialActionLibras/Data_annotations/y_u_corpus.npy')
-y_u_train2 = np.load('F:/Doutorado/Pesquisa/Python/FacialActionLibras/Data_annotations/y_u_train2.npy')
+y_u = np.load('.../Data_annotations/y_u.npy')
+y_u_train1 = np.load('.../Data_annotations/y_u_corpus.npy')
+y_u_train2 = np.load('.../Data_annotations/y_u_train2.npy')
 ##############################################################################
 ##############################################################################
 #X_u=np.append(np.append(x_u,x_u_train1),x_u_train2)
@@ -166,16 +145,15 @@ labels_ordered_u=np.sort(labels_encoded_u)
 labels_ordered_u=np.append(labels_ordered_u,74)
 labels_ordered_u=set(labels_ordered_u)
 labels_ordered_u=np.fromiter(labels_ordered_u, int, len(labels_ordered_u))
-#print(labels_ordered_u)
 ##############################################################################
 ##############################################################################
 #x_l = np.load("x_l.npy")
-#x_l_train1 = np.load("F:/Doutorado/Pesquisa/Python/Data_annotations/x_l_corpus.npy")
-x_l_train2 = np.load("F:/Doutorado/Pesquisa/Python/cnn_lstm/data/x_l_train2.npy")
+#x_l_train1 = np.load(".../Data_annotations/x_l_corpus.npy")
+x_l_train2 = np.load(".../Data_annotations/x_l_train2.npy")
 #
-y_l = np.load('F:/Doutorado/Pesquisa/Python/FacialActionLibras/Data_annotations/y_l.npy')
-y_l_train1 = np.load('F:/Doutorado/Pesquisa/Python/FacialActionLibras/Data_annotations/y_l_corpus.npy')
-y_l_train2 = np.load('F:/Doutorado/Pesquisa/Python/FacialActionLibras/Data_annotations/y_l_train2.npy')
+y_l = np.load('.../Data_annotations/y_l.npy')
+y_l_train1 = np.load('.../Data_annotations/y_l_corpus.npy')
+y_l_train2 = np.load('.../Data_annotations/y_l_train2.npy')
 ##############################################################################
 ##############################################################################
 #X_l=np.append(np.append(x_l,x_l_train1),x_l_train2)
@@ -209,18 +187,14 @@ labels_u=['0','1','2','4','5','6','9','10','1+2','1+3','1+4','1+5','1+6','5+2+7'
 labels_l=['0','1','2','3','4','5','10+25','25+62','22+25','9','10','25+70','12','13','14','15','16','17','18','24','20','25','22','23','24','25','26','27','28','34','61+72','12+25','12+20+25+26','33','34','35',       '15+72',   '15+16+20+25',     '13+16+25',    '18+22+25',     '16+23+25',        '72',         '61',         '62',   '12+22+25+26',   '20+22+25+26',     '15+16+17',       '26+28',       '21+17',     '12+19+25',     '15+16+20',         '72',         '73',       '26+33',     '15+16+25',       '16+17',       '16+20',        '26',       '16+23',       '16+25',       '16+26', '15+17+20+25+26',        '28',       '26+62',     '22+23+25',   '19+22+25+26',     '10+25+26',     '10+25+27',    '22+25+26',   '22+25+26+72',   '22+25+26+73',       '16+70',       '25+72',   '10+19+25+26',   '25+27+70+71',     '12+25+26',     '12+25+27',     '12+25+28',     '15+22+25',   '15+16+25+26',     '15+17+20',     '12+20+25',     '15+17+22',     '15+17+23',     '10+25+72',     '12+15+17',     '12+25+41',       '22+23',     '15+17+24',       '22+25',       '22+26',     '15+17+25',     '15+17+26',     '15+17+28',       '17+20',     '20+24+26',       '17+23',       '17+24',       '17+25',       '17+26',       '12+15',     '14+25+26',       '12+17',     '17+22+25',     '18+70+71',       '12+20',       '12+22',       '12+23',       '12+24',       '12+25',       '12+26',       '17+34',       '12+28',     '12+25+72',     '12+25+73',   '15+16+25+70',   '15+16+25+72',     '15+17+62',     '25+26+28',      '19+25',     '12+28+72',     '15+17+71',     '16+25+25',      '17+26',     '16+25+26',     '17+20+25',        '22+25',     '19+22+25',   '15+20+25+26',   '16+19+25+26',        '32',     '16+20+25',        '34',       '17+72',   '12+16+25+72',      '22+54',   '12172526',   '17+20+25+36',     '10+16+25',     '15+28+25',   '12+17+20+26', '15+16+17+20+26',     '18+25+26',     '25+26+72',     '25+26+73',       '28+25',     '16+25+72',     '23+26+34', '15+16+19+25+26',       '28+32',      '10+25',       '23+24',       '23+25',       '23+26',     '12+16+25',   '25+26+28+73',       '18+22',       '23+34',     '20+25+26',       '18+25',       '13+14',       '18+26',     '20+25+27',     '20+25+32',   '16+20+25+26', '12+17+20+25+26',       '18+34',       '13+23',   '15+22+25+72',       '13+25',      '18+22',      '25+26',       '13+28',      '25+27',     '20+15+17',   '10+15+17+25', '10+16+19+25+26',       '28+72',       '28+73',     '25+27+28',     '23+70+71', '10+12+16+25+72',     '22+25+26',     '22+25+27',   '16+22+25+26',       '23+70',       '23+71',       '23+72',       '23+73',      '15+25',    '19+25+26',       '18+72',       '18+73',     '10+22+25',     '13+19+25',   '15+17+19+25',     '24+25+26',   '10+16+25+26',   '17+20+25+26',     '22+25+61',   '17+20+25+27',   '17+20+25+28',     '25+27+72',     '25+27+73',   '17+20+25+29',   '17+20+25+30',   '17+20+25+31',      '16+25',     '10+12+25',   '17+20+25+32',     '22+25+72',     '22+25+73',   '17+20+25+33',   '17+20+25+34',   '17+20+25+35',     '12+22+25',        '13+72',     '15+19+25',     '12+17+20',       '24+26',       '24+28',     '12+17+25',   '15+16+17+25',   '25+26+70+71',       '19+22',       '19+25',       '34+62',       '19+28',    '15+16+25',     '17+24+28',   '10+16+25+72',       '14+23',       '34+72',       '14+25',       '34+73',   '15+18+22+25',   '19+25+26+28',       '25+26',   '10+12+16+25',   '18+20+25+26',   '26+20+25+26',        '18',       '24+70',       '24+72',   '20+15+17+20',     '13+25+26',   '15+17+25+26',   '22+25+70+71',     '16+22+25',        '34', '18+22+25+70+71',   '15+23+25+26',   '15+17+20+25',   '15+17+20+26',     '16+17+25',   '18+22+25+26',     '34+70+71',   '18+22+25+72',   '19+25+26+72',     '19+25+26',     '19+25+27',     '15+25+26',   '15+19+25+26',     '18+22+25',     '18+22+26',     '19+25+28',       '25+16',    '15+17+26',        '72',       '10+16',     '15+20+25',     '15+20+26',   '18+22+25+73',       '25',       '25+26',       '25+27',       '25+28',   '19+20+25+27',   '20+15+17+71',       '25+31',       '25+32',       '20+24',       '20+25',       '20+26',       '20+27',       '15+16',       '15+17',       '15+18',     '17+25+26',       '15+20',     '23+24+25',       '15+22',       '15+23',       '15+24',       '15+25',       '15+26',       '10+15',       '15+28',       '10+17',     '17+20+26',      '20+25+26',       '10+23']
 ##############################################################################
 ##############################################################################
-
-#%%
 def neural_net(path):
     v_entry=cv2.VideoCapture(path,0)
     Frames = int(v_entry.get(cv2.CAP_PROP_FRAME_COUNT))
     fps = v_entry.get(cv2.CAP_PROP_FPS)
-    #print('Number of Frames=', Frames )
     output_u=[]
     output_l=[]
     M=[]
     for i, j in enumerate(range(0,Frames)):
-        print(i,int(j))
         v_entry.set(1, int(j))
         ret, im = v_entry.read()
         points_u=np.empty((21,2))*0
@@ -228,16 +202,12 @@ def neural_net(path):
         if ret is True:
             a,l = crop_face(im)
             c=get_landmarks(a)
-              #
             points_u[:9,:]=c[17:26,:]
             points_u[10:,:]=c[36:47,:]
             vp=np.stack((points_u))
-              #
             points_l[:12,:]=c[2:14,:]
-            #points_l[4:7,:]=c[11:14,:]
             points_l[13:,:]=c[48:67,:]
             vb=np.stack((points_l))
-              #
             vs_brown_e=np.squeeze(np.asarray(c[19]-c[17]))
             vi_brown_e=np.squeeze(np.asarray(c[21]-c[17]))
             vs_brown_d=np.squeeze(np.asarray(c[24]-c[26]))
@@ -249,35 +219,29 @@ def neural_net(path):
             v1_eye_d=np.squeeze(np.asarray(c[43]-c[47]))
             v2_eye_d=np.squeeze(np.asarray(c[44]-c[46]))
             vs=np.stack((vs_brown_e,vi_brown_e,vs_brown_d,vi_brown_d,v1_eye_e,v2_eye_e,v1_eye_d,v2_eye_d))
-              #
             d_lips_h1=np.squeeze(np.asarray(c[48]-c[54]))
             d_lips_h2=np.squeeze(np.asarray(c[60]-c[64]))
             d_lips_v1=np.squeeze(np.asarray(c[51]-c[57]))
             d_lips_v2=np.squeeze(np.asarray(c[62]-c[66]))
             vl=np.stack((d_lips_h1,d_lips_h2,d_lips_v1,d_lips_v2))
-              #
             p_u=[vp.tolist(), vs.tolist()]
             points_upper=np.hstack([np.hstack(np.vstack(p_u)),a_brown_e,a_brown_d])
             p_l=[vb.tolist(), vl.tolist()]
             points_lower=np.hstack(np.vstack(p_l)).reshape((36,2))
-              ###
             r = cv2.resize(a, dsize=(im_s, im_s), interpolation=cv2.INTER_CUBIC)
             r = r[:,:,1]
             upper = np.array(r[:60,:])
             lower = np.array(r[60:,:])
-              #
             im_u = np.vstack((upper.T,points_upper))  
             im_u = im_u.astype('float32')
             im_u /= 255
             im_l = np.vstack((lower.T,points_lower[:,0],points_lower[:,1]))
             im_l = im_l.astype('float32')
             im_l /= 255
-
             x_upper = np.expand_dims(im_u, axis=0)
             x_lower = np.expand_dims(im_l, axis=0)
             x_upper=x_upper.reshape((1, 60, 97, 1))
             x_lower=x_lower.reshape((1, 36, 98, 1))
-
             exit_u = modelu.predict(x_upper)
             exit_l = modell.predict(x_lower)
             exit_u=np.argmax(exit_u, axis=1)
@@ -286,7 +250,6 @@ def neural_net(path):
             e_labels_l=encoder_l.inverse_transform(exit_l)
             print(e_labels_u)
             print(e_labels_l)
-            
             output_u = np.append(output_u, e_labels_u)
             output_l = np.append(output_l, e_labels_l)
         else:
@@ -298,8 +261,7 @@ def neural_net(path):
     all_exit_l=np.matrix(zip(range(0,Frames),output_l))
     
     root = et.Element('TIERS', **{'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance'}, **{'xsi:noNamespaceSchemaLocation': 'file:avatech-tiers.xsd'})
-    somedata = et.SubElement(root, 'TIER', columns="AUs")
-    
+    somedata = et.SubElement(root, 'TIER', columns="AUs") 
     for m,n in enumerate(range(0,Frames)):
         print(m)
         if (np.where(labels_ordered_u==output_u[m])):
@@ -313,28 +275,21 @@ def neural_net(path):
                 ms_inicial=round((m*(1000 / (fps / 1.001)))*.001,3)
                 ms_final=round(((m+1)*(1000 / (fps / 1.001)))*.001,3)
                 full_elan_exit_u=("<span start= \"%s\" end=\"%s\" ><v>%s</v></span>"%(ms_inicial,ms_final,labels_u[int(a[0][0])]))
-              
                 child1 = ElementTree.SubElement(somedata,"span", start='%s'%(ms_inicial), end="%s"%(ms_final))
-                  
                 v = etree.Element("v")
                 v.text = "%s+%s"%(labels_u[int(a[0][0])],labels_l[int(b[0][0])])
                 child1.append(v)
-
                 tree = cElementTree.ElementTree(root) # wrap it in an ElementTree instance, and save as XML
-                
                 t = minidom.parseString(ElementTree.tostring(root)).toprettyxml() # Since ElementTree write() has no pretty printing support, used minidom to beautify the xml.
                 tree1 = ElementTree.ElementTree(ElementTree.fromstring(t))
                 print(tree1)
-                tree1.write("file.xml",encoding="utf-8", xml_declaration=True)
-
             else:
                 continue
         else:
             continue
         
     return tree1            
-    #return tree1
-
-my_address='F:/Doutorado/Pesquisa/Python/FacialActionLibras/Video_test/bomdia_libras.mp4'
+#call the network function
+my_address='.../Video_test/bomdia_libras.mp4'
 output=neural_net(my_address)
-output.write("file.xml",encoding="utf-8", xml_declaration=True)
+#output.write("file.xml",encoding="utf-8", xml_declaration=True)
