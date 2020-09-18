@@ -27,5 +27,8 @@ Silva, E., Costa, P., Kumada, K., & De Martino, J. M. SILFA: Sign Language Facia
 ---
 
 ### Instalations
+```
+pip install -r requirements.txt
+```
 
 ---
