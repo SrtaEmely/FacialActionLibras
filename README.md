@@ -25,7 +25,7 @@ Mavadati, S. M., Mahoor, M. H., Bartlett, K., Trinh, P., & Cohn, J. F. (2013). D
 
 - HM-Libras dataset:
 
-da Silva, E. P., Costa, P. D. P., Oliveira, K. M., Kumada, J. M. D. M., & Florentino, G. A. Recognition of affective and grammatical facial expressions: a study for Brazilian sign language.
+da Silva, E. P., Costa, P. D. P., Oliveira, K. M., Kumada, J. M. D. M., & Florentino, G. A. Recognition of affective and grammatical facial expressions: a study for Brazilian sign language. In Sign Language Recognition, Translation & Production (SLRTP) Workshop at ECCV 2020.
 
 - SILFA dataset:
 
@@ -34,13 +34,27 @@ Silva, E., Costa, P., Kumada, K., & De Martino, J. M. SILFA: Sign Language Facia
 ---
 
 ### Networks
+- CNN
+- CNN+LSTM
+- SqueezeNet
 
 ---
 
 ### Instalations
+
+A ```requirements.txt``` file is provided in the repository. You can run:
+
 ```
 pip install -r requirements.txt
 ```
+
+to install it at system level
+
+---
+
+### Issues & suggestions:
+- If you find any problem with the code, you can create an issue;
+- Found something you can improve, please send me a pull request with your changes. I will review and approve them.
 
 ---
 
