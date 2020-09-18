@@ -292,4 +292,4 @@ def neural_net(path):
 #call the network function
 my_address='.../Video_test/bomdia_libras.mp4'
 output=neural_net(my_address)
-#output.write("file.xml",encoding="utf-8", xml_declaration=True)
+#output.write("Video_test_libras.xml",encoding="utf-8", xml_declaration=True)
