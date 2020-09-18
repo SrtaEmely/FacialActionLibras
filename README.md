@@ -48,7 +48,7 @@ A ```requirements.txt``` file is provided in the repository. You can run:
 pip install -r requirements.txt
 ```
 
-to install it at system level
+to install it at system level.
 
 ---
 
@@ -59,5 +59,8 @@ to install it at system level
 ---
 
 ### Credits:
+This work is inspired from:
+- https://github.com/keras-team/keras/blob/master/examples/imdb_cnn_lstm.py
+- https://github.com/rcmalli/keras-squeezenet
 
 ---
